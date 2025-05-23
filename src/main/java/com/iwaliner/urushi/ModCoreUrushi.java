@@ -82,6 +82,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
+import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -750,12 +751,10 @@ if(!ConfigUrushi.disableSaltAndSandGeneration.get()) {
         }
     }
     @SubscribeEvent
-    public void MorningEvent(PlayerWakeUpEvent event) {
-        if(event.getEntity().getLevel().getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
-            for (ServerLevel serverlevel : Objects.requireNonNull(event.getEntity().getLevel().getServer()).getAllLevels()) {
-                serverlevel.setDayTime((long) 24000);
+    public void MorningEvent(SleepFinishedTimeEvent event) {
+            for (ServerLevel serverlevel : event.getLevel().getServer().getAllLevels()) {
+                serverlevel.setDayTime(event.getNewTime());
             }
-        }
     }
     @SubscribeEvent
     public void AttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
